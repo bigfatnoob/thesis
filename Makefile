@@ -1,25 +1,18 @@
+CHAPTERS=Chapter-*/Chapter-*.tex  Appendix-*/Appendix-*.tex
+CHAPTERSLOG=Chapter-*/Chapter-*.tex\~  Appendix-*/Appendix-*.tex\~
+NAME=bigfatnoob-thesis
+AUX=$(NAME).aux front.aux Chapter-*/*.aux Appendix-*/*.aux optional.aux
+INTERMEDIATES=$(NAME).bbl $(NAME).blg $(NAME).lof $(NAME).lot \
+              $(NAME).log $(NAME).toc 
+OUTAUX=$(NAME).synctex.gz $(NAME)-blx.bib $(NAME).out $(NAME).run.xml
 
-%.eps: %.dot
-	dot -Tps2 -o $@ $<
+$(NAME).pdf : $(NAME).tex $(NAME).bib front.tex $(CHAPTERS) ncsuthesis.cls optional.tex
+	pdflatex $(NAME)
+	bibtex $(NAME)
+	pdflatex $(NAME)
+	pdflatex $(NAME)
 
-%.pdf: %.dvi
-	dvipdfm $< 
+clean :
+	rm $(AUX) $(INTERMEDIATES) $(OUTAUX) $(CHAPTERSLOG)
 
-%.ps: %.dvi
-	dvips $< -o $@
-
-
-%.dvi: %.tex %.bbl
-	latex $<
-
-all: dis.ps
-
-dis.dvi: dis.tex dis.bbl 
-	latex dis
-
-dis.bbl: dis.bib dis.aux
-	bibtex dis
-
-dis.aux: dis.tex
-	latex dis
 
