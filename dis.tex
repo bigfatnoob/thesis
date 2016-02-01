@@ -1,0 +1,151 @@
+
+\documentclass[11pt]{ncsuthesis4}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyvrb}
+\usepackage{epsfig}
+\usepackage{graphicx} 
+\usepackage{latexsym}
+% ,graphicx,lscape,dectab,harvard} %latex2e
+% \input \path psfig.sty %an excellent utility for including figures-Terry
+\pagestyle{plain} %{empty} to get Appendix without page number
+
+
+\newcommand{\nullset}[0]{\varnothing}
+% re-enable italics -- they ARE allowed!
+% \renewcommand{\em}[0]{}   % disable italics because they're not allowed!
+% \newcommand{\ctt}[0]{}
+\newcommand{\ctt}[0]{\tt}
+
+\begin{document}
+
+\newcommand{\puttitle}[0]{Abstraction-Based Generation of Finite
+      State Models \\from C Programs}
+
+\title{\puttitle}
+
+\author{Daniel C. DuVarney}
+\degreeyear{2002}
+\degree{Doctor of Philosophy}
+\chair{Dr. S. Purushothaman Iyer}
+\memberII{Dr. W. Rance Cleaveland II}
+\memberIII{Dr. K. C. Tai}
+\memberIV{Dr. John W. Baugh, Jr.}
+\numberofmembers{4}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+\begin{large}
+\textbf{ABSTRACT}
+\end{large}
+\end{center}
+DUVARNEY, DANIEL C. \puttitle. (Under the direction of Associate Professor S. Purushothaman Iyer).
+
+\renewcommand{\baselinestretch}{2}
+
+\vspace{0.2in}
+
+Model checking is a major advancement in the quest for
+practical automatic verification methods for computer systems,
+and
+has been effectively used to discover
+flaws in real-world hardware systems.
+Unfortunately, applying model-checking techniques to
+software systems
+has proved to be more difficult, due to the large number of
+states and irregular transitions of such systems.
+One promising method for generating reasonably-sized
+models from programs is the use of {\em data abstraction},
+in which the program data is mapped from a large set of possible
+values to a much smaller set of abstract values.
+This thesis develops a method which,
+given a program in the C language and an abstraction mapping,
+allows the automatic construction of an
+abstract labeled transition system (LTS), which
+is much smaller than the concrete LTS
+(the LTS which would be generated without the benefit of abstraction).
+The method is shown to be {\em sound} in the sense that
+if a program is well-behaved in its use of
+pointers, then any linear temporal logic formula
+which holds true for the corresponding abstract LTS 
+will also hold true for the concrete LTS.
+Furthermore, if a design exists in the form of a transition system,
+then the abstract LTS can be checked against the design for bisimilarity.
+Bisimilarity ensures that the program is a faithful implementation of
+the design.
+A suite of software tools has been implemented based upon
+the theory. These tools interface
+with the Concurrency Workbench, a model checking system.
+A case study is presented which shows the practicality of this technique
+for verifying real-world C programs.
+
+\field{Department of Computer Science}
+\campus{Raleigh}
+
+\maketitle
+
+\begin{frontmatter}
+
+\begin{dedication}
+\begin{center}
+\null\vfil
+Your dedication goes here $\ldots$
+\vfil\null
+\end{center}
+\end{dedication}
+
+\begin{center}
+\begin{large}
+\textbf{Biography}
+\end{large}
+\end{center}
+Put your bio here ...
+
+\begin{acknowledgements}
+Acknowlegements go here...
+
+\end{acknowledgements}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\end{frontmatter}
+
+\chapter{Introduction}
+
+Summary and overview of thesis
+
+\chapter{The Problem}
+
+A statement of the problem
+
+\chapter{Related Work}
+
+Previous attempts to solve the problem
+
+\chapter{Theory}
+
+A theoretical solution
+
+\chapter{Implementation}
+
+An implementation based on the theory
+
+\chapter{Case study}
+
+Experimental Results~\cite{mlton01}
+
+\chapter{Conclusion}
+
+Why your work is better and future work~\cite{am91}
+
+
+
+% \nocite{*}
+\bibliographystyle{plain}
+\bibliography{dis}
+
+\end{document}
