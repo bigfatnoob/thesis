@@ -13,6 +13,9 @@
 %\usepackage{xcolor}
 \usepackage{lipsum}    % filler text
 \usepackage{subfig}    % composite figures
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{bm}
 
 %%ORTIZ PACKAGES
 
@@ -150,7 +153,7 @@
 %%%Fancy tables
 %http://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
 \usepackage[table]{xcolor}
-\usepackage{array,booktabs}
+\usepackage{array,booktabs, multirow}
 \usepackage{colortbl}
 \newcolumntype{L}{@{}>{\kern\tabcolsep}l<{\kern\tabcolsep}}
 
@@ -183,7 +186,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %http://ctan.org/pkg/placeins
 \usepackage{placeins}
-%De­fines a \FloatBar­rier com­mand, be­yond which floats may not pass; use­ful, for ex­am­ple, to en­sure all floats for a sec­tion ap­pear be­fore the next \sec­tion com­mand.
+%Deï¿½fines a \FloatBarï¿½rier comï¿½mand, beï¿½yond which floats may not pass; useï¿½ful, for exï¿½amï¿½ple, to enï¿½sure all floats for a secï¿½tion apï¿½pear beï¿½fore the next \secï¿½tion comï¿½mand.
 
 %%%Hack for centering all figures
 %\makeatletter
@@ -246,7 +249,7 @@
 %%      \cochairI{Doug Dodd}
 %%      \cochairII{Chris Cox}
 %%
-\chair{Doug Dodd}
+\chair{Tim Menzies}
 \memberI{Alex Anderson}
 \memberII{Bobby Brown}
 \memberIII{Chris Cox}   % unnecessary if committeesize=3
@@ -255,11 +258,11 @@
 
 
 %% Student writing thesis, \student{First Middle}{Last}
-\student{John Mark}{Smith} % a full middle name
+\student{George}{Mathew} % a full middle name
 %\student{John M.}{Smith} % a middle initial
 
 %% Degree program
-\program{Physics}
+\program{Computer Science}
 
 %% Thesis Title
 %%  Keep in mind, according to ETD guidelines:
@@ -269,11 +272,10 @@
 %%  Note: To break the title onto multiple lines, use \break instead of \\.
 %\thesistitle{A North Carolina State University Sample \LaTeX{} Thesis \break 
 %with a Title So Long it Needs a Line Break}
-\thesistitle{A North Carolina State University Sample \LaTeX{} Thesis \break 
-with a Title So Long it Needs a Line Break}
+\thesistitle{Design Decision Optimization in Goal Models}
 
 %% Degree year.  Necessary if your degree year doesn't equal the current year.
-%\degreeyear{1995}
+\degreeyear{2016}
 
 
 %%----------------------------------------------------------------------------%%
@@ -291,12 +293,13 @@ with a Title So Long it Needs a Line Break}
 \newcommand{\del}{\nabla}
 \renewcommand{\exp}[1]{e^{#1}}
 \newcommand{\Conv}{\mathop{\scalebox{1.5}{\raisebox{-0.2ex}{$\ast$}}}}%
+\newcommand{\bit}[1]{\textbf{\textit{#1}}}
 
 
 \usepackage{color}
 %\newcommand{\NEW}[1]{\textcolor{blue}{#1}}
 \newcommand{\NEW}[1]{#1}
-\newcommand{\COMMENT}[1]{\textcolor{green}{#1}}
+% \newcommand{\COMMENT}[1]{\textcolor{green}{#1}}
 
 
 \newcommand{\NOTER}[1]{\textcolor{orange}{#1}}
@@ -306,9 +309,17 @@ with a Title So Long it Needs a Line Break}
 \newcommand{\mum}{\ensuremath{{\mu}\text{m}}}
 
 %This makes it so that you can add short paths in your .tex by including the folders where you store your images in the search path
-\graphicspath{{./Chapter-1/figs/}{./Chapter-2/figs/}{./Chapter-3/figs/}}%{./Chapter-4/figs/}{./Chapter-5/figs/}{./Chapter-6/figs/}}
+\graphicspath{{./Chapter-1/figs/}{./Chapter-2/figs/}{./Chapter-3/figs/}{./Chapter-4/figs/}}%{./Chapter-5/figs/}{./Chapter-6/figs/}}
 
+\newcommand{\TODO}[1]{\textbf{TODO: #1}\\}
+\newcommand{\boldm}[1]{$\bm{#1}$}
+\usepackage{paralist}
+\usepackage{enumitem}
+\setlistdepth{9}
+\usepackage{mdframed}
+\newcommand*\pconsistent{\vcenter{\hbox{\includegraphics[scale=0.34]{Chapter-6/figs/para_consistent.png}}}}
 
+\newtheorem{definition}{Definition}[section]
 %%---------------------------------------------------------------------------%%
 \usepackage{calc}
 %% Capital letter height
@@ -361,16 +372,14 @@ with a Title So Long it Needs a Line Break}
 %%---------------------------------------------------------------------------%%
 \mainmatter
 
-
-
 \pagestyle{fancy}
 \newgeometry{margin=1in,lmargin=1.25in,footskip=\chapterfootskip, includehead, includefoot}
 \include{Chapter-1/Chapter-1}
 \include{Chapter-2/Chapter-2}
 \include{Chapter-3/Chapter-3}
-%\include{Chapter-4/Chapter-4}
-%\include{Chapter-5/Chapter-5}
-%\include{Chapter-6/Chapter-6}
+\include{Chapter-4/Chapter-4}
+\include{Chapter-5/Chapter-5}
+\include{Chapter-6/Chapter-6}
 %\restoregeometry
 
 
@@ -402,7 +411,7 @@ with a Title So Long it Needs a Line Break}
 %\ensureoddstart
 \begin{spacing}{1}
  \setlength\bibitemsep{11pt} %22pt = 2*11pt, where fontsize is 11pt
- \addcontentsline{toc}{chapter}{{\uppercase{\bibname}}} %\textorpdfstring and \uppercase needed due to hyperref package http://www.latex-community.org/forum/viewtopic.php?f=44&t=16601
+ \addcontentsline{toc}{chapter}{\bibname} %\textorpdfstring and \uppercase needed due to hyperref package http://www.latex-community.org/forum/viewtopic.php?f=44&t=16601
  %\vspace{-0.5in}
 \titleformat{\chapter}[display]{\bf\filcenter
 }{\chaptertitlename\ \thechapter}{11pt}{\bf\filcenter}
@@ -422,6 +431,7 @@ with a Title So Long it Needs a Line Break}
 
 
 \include{Appendix-A/Appendix-A}
+\include{Appendix-B/Appendix-B}
 
 \restoregeometry
 

@@ -17,22 +17,22 @@
 %% -------------------------------------------------------------------------- %%
 %% ------------------------------ Thesis type ------------------------------- %%
 %% -------------------------------------------------------------------------- %%
-\newcommand{\ncsu@thesistype}{phd}
+\newcommand{\ncsu@thesistype}{ms}
 \DeclareOption{phd}{\renewcommand{\ncsu@thesistype}{phd}}
 \DeclareOption{ms}{\renewcommand{\ncsu@thesistype}{ms}}
 
 %% Spacing options
 \newcommand{\ncsu@defaultspacing}{\onehalfspacing}
 \DeclareOption{singlespacing}{
-	\renewcommand{\ncsu@defaultspacing}{\singlespacing}}
+     \renewcommand{\ncsu@defaultspacing}{\singlespacing}}
 \DeclareOption{onehalfspacing}{
-	\renewcommand{\ncsu@defaultspacing}{\onehalfspacing}}
+     \renewcommand{\ncsu@defaultspacing}{\onehalfspacing}}
 \DeclareOption{doublespacing}{
-	\renewcommand{\ncsu@defaultspacing}{\doublespacing}}
+     \renewcommand{\ncsu@defaultspacing}{\doublespacing}}
 
 \newenvironment{lscape}{\begin{lscapenum}}{\end{lscapenum}}
 \DeclareOption{hardcopy}{
-	\renewenvironment{lscape}{\begin{lscapenotnum}}{\end{lscapenotnum}}
+    \renewenvironment{lscape}{\begin{lscapenotnum}}{\end{lscapenotnum}}
 }
 
 \DeclareOption{draft}{\PassOptionsToClass{\CurrentOption}{book}}
@@ -78,26 +78,26 @@
 \setlength{\ncsu@footskip}{\ncsu@capitalheight}
 \addtolength{\ncsu@footskip}{2\baselineskip}
 \addtolength{\ncsu@footskip}{0.5ex}  % A little extra space to ensure there
-%  are 2 full double spaced lines
+                                     %  are 2 full double spaced lines
 \RequirePackage[includefoot,
-margin=1in,
-lmargin=1.25in,
-bmargin=1.04in,
-footskip=\ncsu@footskip]{geometry}
+                margin=1in,
+                lmargin=1.25in,
+				bmargin=1.04in,
+                footskip=\ncsu@footskip]{geometry}
 
 %% -------------------------------------------------------------------------- %%
 %% Disposition format -- any titles, headings, section titles
 \newcommand{\ncsu@dispositionformat}{}
 \allsectionsfont{\ncsu@dispositionformat}
 \providecommand{\dispositionformat}[1]{
-	\renewcommand{\ncsu@dispositionformat}{#1}
-	\allsectionsfont{\ncsu@dispositionformat}
+    \renewcommand{\ncsu@dispositionformat}{#1}
+    \allsectionsfont{\ncsu@dispositionformat}
 }
 
 %% Heading/Chapter/Section format
 \newcommand{\ncsu@headingformat}{\ncsu@dispositionformat}
 \providecommand{\headingformat}[1]{
-	\renewcommand{\ncsu@headingformat}{\ncsu@dispositionformat #1}
+    \renewcommand{\ncsu@headingformat}{\ncsu@dispositionformat #1}
 }
 
 %% \chapter*-to-first line space
@@ -124,31 +124,31 @@ footskip=\ncsu@footskip]{geometry}
 %% Command to test for period after middle name
 \newboolean{@ncsu@needsperiod}
 \newcommand{\ncsu@testlastchar}[2]{%
-	\ifthenelse{\equal{#2}{\relax}}{
-		\ifthenelse{\equal{#1}{.}}{%
-			\setboolean{@ncsu@needsperiod}{false}
-		}{% #1 != .
-		\setboolean{@ncsu@needsperiod}{true}
-	}
-	\let\next=\relax
-}
-{% #2 != relax
-	\let\next=\ncsu@testlastchar
-}
-\next#2
+    \ifthenelse{\equal{#2}{\relax}}{
+        \ifthenelse{\equal{#1}{.}}{%
+            \setboolean{@ncsu@needsperiod}{false}
+        }{% #1 != .
+            \setboolean{@ncsu@needsperiod}{true}
+        }
+        \let\next=\relax
+    }
+    {% #2 != relax
+        \let\next=\ncsu@testlastchar
+    }
+    \next#2
 }
 
 \providecommand{\student}[2]{
-	\renewcommand{\ncsu@authorfirstmiddle}{#1}
-	\renewcommand{\ncsu@authorlast}{#2}
-	\ncsu@testlastchar#1\relax
-	\author{\ncsu@authorfirstmiddle{} \ncsu@authorlast}
+    \renewcommand{\ncsu@authorfirstmiddle}{#1}
+    \renewcommand{\ncsu@authorlast}{#2}
+    \ncsu@testlastchar#1\relax
+    \author{\ncsu@authorfirstmiddle{} \ncsu@authorlast}
 }
 
 %% Degree year - in case the degree year doesn't match the current year.
 \newcommand{\ncsu@year}{\the\year}
 \providecommand{\degreeyear}[1]{
-	\renewcommand{\ncsu@year}{#1}
+    \renewcommand{\ncsu@year}{#1}
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -173,19 +173,19 @@ footskip=\ncsu@footskip]{geometry}
 %%           capital letters on the first line. (\ncsu@leading)
 \newlength{\ncsu@afterschapbeforeleadingsep}
 \AtBeginDocument{% at begin doc is necessary since fncychap
-	%  redefines \@makeschapterhead
-	\renewcommand{\@makeschapterhead}[1]{%
-		% Measure the leading here (which depends on the current line spacing),
-		% and adjust the spacing accordingly between the baseline of the
-		% heading and the top of capital letters on the first line.
-		\setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
-		\setlength{\ncsu@afterschapbeforeleadingsep}%
-		{\ncsu@afterschapsep-\ncsu@leading}%
-		{\noindent\centering%
-			{\ncsu@headingformat #1}%
-			\par\nobreak%
-			\vspace{\ncsu@afterschapbeforeleadingsep}}%
-	}
+                 %  redefines \@makeschapterhead
+    \renewcommand{\@makeschapterhead}[1]{%
+        % Measure the leading here (which depends on the current line spacing),
+        % and adjust the spacing accordingly between the baseline of the
+        % heading and the top of capital letters on the first line.
+        \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+        \setlength{\ncsu@afterschapbeforeleadingsep}%
+                  {\ncsu@afterschapsep-\ncsu@leading}%
+        {\noindent\centering%
+          {\ncsu@headingformat #1}%
+          \par\nobreak%
+          \vspace{\ncsu@afterschapbeforeleadingsep}}%
+    }
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -195,35 +195,35 @@ footskip=\ncsu@footskip]{geometry}
 %%     instead of \\
 \newcommand{\abstractname}{Abstract}
 \newenvironment{abstract}{%
-	\singlespacing
-	\titlepage
-	\chapter*{\abstractname}
-	\noindent \MakeUppercase{\ncsu@authorlast{}, \ncsu@authorfirstmiddle{}}%
-	\ifthenelse{\boolean{@ncsu@needsperiod}}{\@. }{~}%
-	\nohyphens{\nolbreaks{\ncsu@thesistitle}.
-		(Under the direction of
-		\ifthenelse{\equal{\ncsu@chairtype}{chair}}%
-		{\ncsu@chair}{\ncsu@cochairI\ and \ncsu@cochairII}.)}\\
-	
-	\ncsu@defaultspacing
-	\thispagestyle{empty}
-	\pagestyle{empty}
+   \singlespacing
+   \titlepage
+   \chapter*{\abstractname}
+   \noindent \MakeUppercase{\ncsu@authorlast{}, \ncsu@authorfirstmiddle{}}%
+   \ifthenelse{\boolean{@ncsu@needsperiod}}{\@. }{~}%
+    \nohyphens{\nolbreaks{\ncsu@thesistitle}.
+   (Under the direction of
+   \ifthenelse{\equal{\ncsu@chairtype}{chair}}%
+              {\ncsu@chair}{\ncsu@cochairI\ and \ncsu@cochairII}.)}\\
+
+   \ncsu@defaultspacing
+   \thispagestyle{empty}
+   \pagestyle{empty}
 }%
 {\endtitlepage \pagestyle{plain}}
 
 %% -------------------------------------------------------------------------- %%
 %% Abstract page commands
 \newcommand{\makecopyrightpage}{
-	\begin{titlepage}
-		\centering
-		\quad
-		\vspace{0.47\textheight} %SPB
-		
-		\copyright{} Copyright \ncsu@year{} by \@author \\[1em]
-		All Rights Reserved
-		
-		\vfill
-	\end{titlepage}
+    \begin{titlepage}
+    \centering
+      \quad
+      \vspace{0.47\textheight} %SPB
+
+      \copyright{} Copyright \ncsu@year{} by \@author \\[1em]
+      All Rights Reserved
+
+      \vfill
+    \end{titlepage}
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -242,80 +242,80 @@ footskip=\ncsu@footskip]{geometry}
 \newcommand{\ncsu@chair}{Advisor Q. Chair}
 \newcommand{\ncsu@chairtitle}{Chair of Advisory Committee}
 \providecommand{\chair}[2][]{
-	\renewcommand{\ncsu@chair}{#2}
-	% Checking if optional title argument is present.
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@chairtitle}{#1}}
-	% Declare that we have a chair:
-	\renewcommand{\ncsu@chairtype}{chair}
+    \renewcommand{\ncsu@chair}{#2}
+    % Checking if optional title argument is present.
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@chairtitle}{#1}}
+    % Declare that we have a chair:
+    \renewcommand{\ncsu@chairtype}{chair}
 }
 
 \newcommand{\ncsu@cochairI}{Co-chair 1 of Committee}
 \newcommand{\ncsu@cochairItitle}{Co-chair of Advisory Committee}
 \providecommand{\cochairI}[2][]{
-	\renewcommand{\ncsu@cochairI}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@cochairItitle}{#1}}
-	% Declare that we have co-chairs.
-	\renewcommand{\ncsu@chairtype}{cochair}
+    \renewcommand{\ncsu@cochairI}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@cochairItitle}{#1}}
+    % Declare that we have co-chairs.
+    \renewcommand{\ncsu@chairtype}{cochair}
 }
 
 \newcommand{\ncsu@cochairII}{Co-chair 2 of Committee}
 \newcommand{\ncsu@cochairIItitle}{Co-chair of Advisory Committee}
 \providecommand{\cochairII}[2][]{
-	\renewcommand{\ncsu@cochairII}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@cochairIItitle}{#1}}
-	\renewcommand{\ncsu@chairtype}{cochair}
+    \renewcommand{\ncsu@cochairII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@cochairIItitle}{#1}}
+    \renewcommand{\ncsu@chairtype}{cochair}
 }
 
 \newcommand{\ncsu@memberI}{Member 1 of Committee}
 \newcommand{\ncsu@memberItitle}{}
 \providecommand{\memberI}[2][]{
-	\renewcommand{\ncsu@memberI}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberItitle}{#1}}
+    \renewcommand{\ncsu@memberI}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberItitle}{#1}}
 }
 
 \newcommand{\ncsu@memberII}{Member 2 of Committee}
 \newcommand{\ncsu@memberIItitle}{}
 \providecommand{\memberII}[2][]{
-	\renewcommand{\ncsu@memberII}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIItitle}{#1}}
+    \renewcommand{\ncsu@memberII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIItitle}{#1}}
 }
 
 \newcommand{\ncsu@memberIII}{Member 3 of Committee}
 \newcommand{\ncsu@memberIIItitle}{}
 \providecommand{\memberIII}[2][]{
-	\renewcommand{\ncsu@memberIII}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIIItitle}{#1}}
+    \renewcommand{\ncsu@memberIII}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIIItitle}{#1}}
 }
 
 \newcommand{\ncsu@memberIV}{Member 4 of Committee}
 \newcommand{\ncsu@memberIVtitle}{}
 \providecommand{\memberIV}[2][]{
-	\renewcommand{\ncsu@memberIV}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIVtitle}{#1}}
+    \renewcommand{\ncsu@memberIV}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberIVtitle}{#1}}
 }
 
 \newcommand{\ncsu@memberV}{Member 5 of Committee}
 \newcommand{\ncsu@memberVtitle}{}
 \providecommand{\memberV}[2][]{
-	\renewcommand{\ncsu@memberV}{#2}
-	\ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberVtitle}{#1}}
+    \renewcommand{\ncsu@memberV}{#2}
+    \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ncsu@memberVtitle}{#1}}
 }
 
 \newcommand{\ncsu@titlepageparagraph}{
-	\ifthenelse{\equal{\ncsu@thesistype}{phd}}{
-		A dissertation submitted to the Graduate Faculty of\\
-		North Carolina State University\\
-		in partial fulfillment of the\\
-		requirements for the Degree of\\
-		Doctor of Philosophy
-	}{} % end ifthenels phd
-	\ifthenelse{\equal{\ncsu@thesistype}{ms}}{
-		A thesis submitted to the Graduate Faculty of\\
-		North Carolina State University\\
-		in partial fulfillment of the\\
-		requirements for the Degree of\\
-		Master of Science
-	}{} % end ifthenels phd
+ \ifthenelse{\equal{\ncsu@thesistype}{phd}}{
+   A dissertation submitted to the Graduate Faculty of\\
+   North Carolina State University\\
+   in partial fulfillment of the\\
+   requirements for the Degree of\\
+   Doctor of Philosophy
+ }{} % end ifthenels phd
+ \ifthenelse{\equal{\ncsu@thesistype}{ms}}{
+   A thesis submitted to the Graduate Faculty of\\
+   North Carolina State University\\
+   in partial fulfillment of the\\
+   requirements for the Degree of\\
+   Master of Science
+ }{} % end ifthenels phd
 }
 
 \newcommand{\ncsu@program}{Degree Program}
@@ -324,115 +324,115 @@ footskip=\ncsu@footskip]{geometry}
 \newcommand{\ncsu@citystate}{Raleigh, North Carolina}
 
 \newcommand{\ncsu@signatureline}[2][]{
-	\begin{minipage}[t]{0.4\textwidth}
-		\centering
-		\hrule
-		\vspace{0.5ex}
-		#2\\ #1
-	\end{minipage}
+    \begin{minipage}[t]{0.4\textwidth}
+    \centering
+     \hrule
+     \vspace{0.5ex}
+     #2\\ #1
+    \end{minipage}
 }
 
 \newcommand{\ncsu@committeesignatures}{
-	\ifthenelse{\equal{\ncsu@chairtype}{chair}}{
-		\ifthenelse{\ncsu@committeesize=3}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
-				\multicolumn{2}{c}{\ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}}
-			\end{tabular}
-		}{} % end ifthenelse = 3
-		\ifthenelse{\ncsu@committeesize=4}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
-				\ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
-				\ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
-			\end{tabular}
-		}{} % end ifthenelse = 4
-		\ifthenelse{\ncsu@committeesize=5}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
-				\ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
-				\ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
-				\multicolumn{2}{c}{\ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}}
-			\end{tabular}
-		}{} % end ifthenelse = 5
-		\ifthenelse{\ncsu@committeesize=6}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
-				\ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
-				\ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
-				\ncsu@signatureline[\ncsu@memberVtitle]{\ncsu@memberV} &
-				\ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
-			\end{tabular}
-		}{} % end ifthenelse = 6
-	}{} % end ifthenelse type = chair
-	\ifthenelse{\equal{\ncsu@chairtype}{cochair}}{
-		% co-chairs; if number is odd, put co-chairs on top line.
-		\ifthenelse{\ncsu@committeesize=3}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
-				\ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII} \\[6em]
-				\multicolumn{2}{c}%
-				{\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI}}
-			\end{tabular}
-		}{} % end ifthenelse = 3
-		\ifthenelse{\ncsu@committeesize=4}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
-				\ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
-				\ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII}
-			\end{tabular}
-		}{} % end ifthenelse = 4
-		\ifthenelse{\ncsu@committeesize=5}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
-				\ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII} \\[5em]
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
-				\multicolumn{2}{c}%
-				{\ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII}}
-			\end{tabular}
-		}{} % end ifthenelse = 5
-		\ifthenelse{\ncsu@committeesize=6}{
-			\begin{tabular}[t]{c@{\hspace{0.5in}}c}
-				\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
-				\ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
-				\ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
-				\ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
-				\ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
-				\ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII} \\
-			\end{tabular}
-		}{} % end ifthenelse = 6
-	}{} % end ifthenelse type = cochair
+  \ifthenelse{\equal{\ncsu@chairtype}{chair}}{
+    \ifthenelse{\ncsu@committeesize=3}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
+         \multicolumn{2}{c}{\ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}}
+      \end{tabular}
+    }{} % end ifthenelse = 3
+    \ifthenelse{\ncsu@committeesize=4}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
+         \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+         \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
+      \end{tabular}
+    }{} % end ifthenelse = 4
+    \ifthenelse{\ncsu@committeesize=5}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+         \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+         \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
+         \multicolumn{2}{c}{\ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair}}
+      \end{tabular}
+    }{} % end ifthenelse = 5
+    \ifthenelse{\ncsu@committeesize=6}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+         \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+         \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
+         \ncsu@signatureline[\ncsu@memberVtitle]{\ncsu@memberV} &
+         \ncsu@signatureline[\ncsu@chairtitle]{\ncsu@chair} \\
+      \end{tabular}
+    }{} % end ifthenelse = 6
+  }{} % end ifthenelse type = chair
+  \ifthenelse{\equal{\ncsu@chairtype}{cochair}}{
+    % co-chairs; if number is odd, put co-chairs on top line.
+    \ifthenelse{\ncsu@committeesize=3}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
+         \ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII} \\[6em]
+         \multicolumn{2}{c}%
+           {\ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI}}
+      \end{tabular}
+    }{} % end ifthenelse = 3
+    \ifthenelse{\ncsu@committeesize=4}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[6em]
+         \ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
+         \ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII}
+      \end{tabular}
+    }{} % end ifthenelse = 4
+    \ifthenelse{\ncsu@committeesize=5}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
+         \ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII} \\[5em]
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+         \multicolumn{2}{c}%
+           {\ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII}}
+      \end{tabular}
+    }{} % end ifthenelse = 5
+    \ifthenelse{\ncsu@committeesize=6}{
+      \begin{tabular}[t]{c@{\hspace{0.5in}}c}
+         \ncsu@signatureline[\ncsu@memberItitle]{\ncsu@memberI} &
+         \ncsu@signatureline[\ncsu@memberIItitle]{\ncsu@memberII} \\[5em]
+         \ncsu@signatureline[\ncsu@memberIIItitle]{\ncsu@memberIII} &
+         \ncsu@signatureline[\ncsu@memberIVtitle]{\ncsu@memberIV} \\[5em]
+         \ncsu@signatureline[\ncsu@cochairItitle]{\ncsu@cochairI} &
+         \ncsu@signatureline[\ncsu@cochairIItitle]{\ncsu@cochairII} \\
+      \end{tabular}
+    }{} % end ifthenelse = 6
+  }{} % end ifthenelse type = cochair
 }
 
 \newcommand{\maketitlepage}{
-	\thispagestyle{empty}
-	\clearpage
-	\singlespacing
-	\begin{center}
-		\vfill
-		\ncsu@thesistitle
-		\vfill
-		by \\
-		\@author
-		\vfill
-		\ncsu@titlepageparagraph
-		\vfill
-		\ncsu@program\\[2.5\ncsu@lineheight]
-		\ncsu@citystate\\[1\ncsu@lineheight]
-		\ncsu@year
-		\vfill
-		APPROVED BY:
-		\vfill
-		\ncsu@committeesignatures
-	\end{center}
-	\clearpage
-	\ncsu@defaultspacing
+     \thispagestyle{empty}
+     \clearpage
+     \singlespacing
+      \begin{center}
+            \vfill
+        \ncsu@thesistitle
+            \vfill
+        by \\
+        \@author
+            \vfill
+       \ncsu@titlepageparagraph
+           \vfill
+       \ncsu@program\\[2.5\ncsu@lineheight]
+       \ncsu@citystate\\[1\ncsu@lineheight]
+       \ncsu@year
+           \vfill
+       APPROVED BY:
+           \vfill
+       \ncsu@committeesignatures
+      \end{center}
+     \clearpage
+     \ncsu@defaultspacing
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -440,7 +440,7 @@ footskip=\ncsu@footskip]{geometry}
 %% -------------------------------------------------------------------------- %%
 %%  Template
 \newcommand{\ncsu@dedbioack}[1]{%
-	\chapter*{#1}%
+    \chapter*{#1}%
 }
 
 %%  Dedication
@@ -469,14 +469,14 @@ footskip=\ncsu@footskip]{geometry}
 \renewcommand{\cftchappresnum}{Chapter }
 \renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}}
 \newcommand{\thesistableofcontents}{%
-	\singlespacing%
-	\setlength{\cftbeforetoctitleskip}{-\baselineskip}
-	\setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
-	\setlength{\cftaftertoctitleskip}%
-	{\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
-	\tableofcontents%
-	\clearpage%
-	\ncsu@defaultspacing%
+    \singlespacing%
+    \setlength{\cftbeforetoctitleskip}{-\baselineskip}
+    \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+    \setlength{\cftaftertoctitleskip}%
+              {\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
+    \tableofcontents%
+    \clearpage%
+    \ncsu@defaultspacing%
 }
 %% tocloft typesets ToC title, so we must give it our heading formats
 \renewcommand{\cfttoctitlefont}{\hfill\ncsu@headingformat}
@@ -488,15 +488,15 @@ footskip=\ncsu@footskip]{geometry}
 
 \renewcommand{\cftfigpresnum}{Figure }
 \newcommand{\thesislistoffigures}{%
-	\singlespacing%
-	\setlength{\cftbeforeloftitleskip}{-\baselineskip}
-	\setlength{\cftfigindent}{.01in} %SPB
-	\setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
-	\setlength{\cftafterloftitleskip}%
-	{\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
-	\listoffigures%
-	\clearpage%
-	\ncsu@defaultspacing%
+    \singlespacing%
+    \setlength{\cftbeforeloftitleskip}{-\baselineskip}
+    \setlength{\cftfigindent}{.01in} %SPB
+    \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+    \setlength{\cftafterloftitleskip}%
+              {\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
+    \listoffigures%
+    \clearpage%
+    \ncsu@defaultspacing%
 }
 \renewcommand{\cftloftitlefont}{\hfill\ncsu@headingformat}
 \renewcommand{\cftafterloftitle}{\hfill}
@@ -506,15 +506,15 @@ footskip=\ncsu@footskip]{geometry}
 \settowidth{\cfttabnumwidth}{Table 00.000}
 \renewcommand{\cfttabpresnum}{Table }
 \newcommand{\thesislistoftables}{%
-	\singlespacing%
-	\setlength{\cftbeforelottitleskip}{-\baselineskip}
-	\setlength{\cfttabindent}{.01in} %SPB
-	\setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
-	\setlength{\cftafterlottitleskip}%
-	{\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
-	\listoftables%
-	\clearpage%
-	\ncsu@defaultspacing%
+    \singlespacing%
+    \setlength{\cftbeforelottitleskip}{-\baselineskip}
+    \setlength{\cfttabindent}{.01in} %SPB
+    \setlength{\ncsu@leading}{\baselineskip-\ncsu@capitalheight}%
+    \setlength{\cftafterlottitleskip}%
+              {\ncsu@afterschapsep-\cftbeforechapskip-\ncsu@leading}%
+    \listoftables%
+    \clearpage%
+    \ncsu@defaultspacing%
 }
 \renewcommand{\cftlottitlefont}{\hfill\ncsu@headingformat}
 \renewcommand{\cftafterlottitle}{\hfill}
@@ -541,57 +541,57 @@ footskip=\ncsu@footskip]{geometry}
 %% Rotate page and page number
 \newenvironment{lscapenum}
 {
-	%%   The standard landscape environment does not rotate the margins and
-	%%   page number.  However, we want the margins (mostly) rotated as well
-	%%   as the page number.  To change the margins, we use the \changepage
-	%%   command from the \changepage package.  Since the \textheight and
-	%%   \textwidth dimensions get switched, we need to reduce the rotated
-	%%   \textheight by \ncsu@footskip and increase the \textwidth by the
-	%%   same measure.
-	%%
-	%%   The syntax of the \changepage command is
-	%% \changepage{textheight}{textwidth}{evensidemargin}{oddsidemargin}{columnsep}
-	%%            {topmargin}{headheight}{headsep}{footskip}
-	\clearpage
-	\changepage{\ncsu@footskip}{-\ncsu@footskip}{}{}{}{}{}{}{}
-	\begin{landscape}
-		\pagestyle{fancy}
-		\fancyhead{} % clear all header fields
-		\fancyfoot{} % clear all footer fields
-		\renewcommand{\headrulewidth}{0pt}
-		\rfoot{
-			%% Since the header and footer are unrotated, we must manually
-			%% place the page number.  The picture environment is included in
-			%% standard LaTeX.
-			\setlength{\unitlength}{\portraittextheight}
-			\begin{picture}(0,0)
-			\put(0.055,0.557){\begin{sideways}\thepage\end{sideways}} % page number
-			\end{picture}
-		}
-		
-	}
-	{
-	\end{landscape}
-	%% The \textheight is too large leaving landscape environment
-	%%  since we invoked the \changepage.  We manually reduce it.
-	\addtolength{\textheight}{-\ncsu@footskip}
-	
-	%% \textheight controls 3 other variables, which must be updated.
-	%% See \endlandscape definition in lscape.sty
-	\global\@colht=\textheight
-	\global\vsize=\textheight
-	\global\@colroom=\textheight
-	
-	\pagestyle{plain}
+%%   The standard landscape environment does not rotate the margins and
+%%   page number.  However, we want the margins (mostly) rotated as well
+%%   as the page number.  To change the margins, we use the \changepage
+%%   command from the \changepage package.  Since the \textheight and
+%%   \textwidth dimensions get switched, we need to reduce the rotated
+%%   \textheight by \ncsu@footskip and increase the \textwidth by the
+%%   same measure.
+%%
+%%   The syntax of the \changepage command is
+%% \changepage{textheight}{textwidth}{evensidemargin}{oddsidemargin}{columnsep}
+%%            {topmargin}{headheight}{headsep}{footskip}
+   \clearpage
+   \changepage{\ncsu@footskip}{-\ncsu@footskip}{}{}{}{}{}{}{}
+   \begin{landscape}
+     \pagestyle{fancy}
+     \fancyhead{} % clear all header fields
+     \fancyfoot{} % clear all footer fields
+     \renewcommand{\headrulewidth}{0pt}
+     \rfoot{
+       %% Since the header and footer are unrotated, we must manually
+       %% place the page number.  The picture environment is included in
+       %% standard LaTeX.
+       \setlength{\unitlength}{\portraittextheight}
+       \begin{picture}(0,0)
+           \put(0.055,0.557){\begin{sideways}\thepage\end{sideways}} % page number
+       \end{picture}
+     }
+
+}
+{
+   \end{landscape}
+   %% The \textheight is too large leaving landscape environment
+   %%  since we invoked the \changepage.  We manually reduce it.
+   \addtolength{\textheight}{-\ncsu@footskip}
+
+   %% \textheight controls 3 other variables, which must be updated.
+   %% See \endlandscape definition in lscape.sty
+   \global\@colht=\textheight
+   \global\vsize=\textheight
+   \global\@colroom=\textheight
+
+   \pagestyle{plain}
 }
 
 %% Rotate page but NOT page number
 \newenvironment{lscapenotnum}
 {
-	\begin{landscape}
-	}
-	{
-	\end{landscape}
+   \begin{landscape}
+}
+{
+   \end{landscape}
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -609,17 +609,17 @@ footskip=\ncsu@footskip]{geometry}
 %% natbib redefines \thebibliography, so we add our own requirements
 %% at \begin{document} time.
 \AtBeginDocument{
-	\let\ncsu@thebibliography\thebibliography
-	\let\endncsu@thebibliography\endthebibliography
-	\renewenvironment{thebibliography}[1]
-	{
-		\doublespacing %%modification 12/12/13 by isbayram@ncsu.edu, Grad School requires double spacing in the references
-		\begin{ncsu@thebibliography}{#1}
-		}
-		{
-		\end{ncsu@thebibliography}
-		\ncsu@defaultspacing
-	}
+    \let\ncsu@thebibliography\thebibliography
+    \let\endncsu@thebibliography\endthebibliography
+    \renewenvironment{thebibliography}[1]
+    {
+        \doublespacing %%modification 12/12/13 by isbayram@ncsu.edu, Grad School requires double spacing in the references
+        \begin{ncsu@thebibliography}{#1}
+    }
+    {
+        \end{ncsu@thebibliography}
+        \ncsu@defaultspacing
+    }
 }
 
 %% -------------------------------------------------------------------------- %%
@@ -630,7 +630,7 @@ footskip=\ncsu@footskip]{geometry}
 \settowidth{\appendixwidth}{Appendix A}
 \addtolength{\appendixwidth}{1em}
 \providecommand{\appendixheader}[1]{
-	\renewcommand{\ncsu@appendixheader}{#1}
+    \renewcommand{\ncsu@appendixheader}{#1}
 }
 
 %% Count the total number of appendices
@@ -638,49 +638,49 @@ footskip=\ncsu@footskip]{geometry}
 \regtotcounter{chapter} % chapter counter is used for appendices
 
 \AtBeginDocument{%
-	%% Since ETD requirements are different than LaTeX's normal formatting of
-	%% the Table of Content's Appendix listings,
-	%% we change the indentation of chapters, sections, and subsections in
-	%% the appendix part of the table of contents, but no deeper divisions,
-	%% so we must cap the tocdepth at 2:
-	\newcounter{ncsu@appendixtocdepth}
-	\ifthenelse{\c@tocdepth > 2}
-	{\setcounter{ncsu@appendixtocdepth}{2}}
-	{\setcounter{ncsu@appendixtocdepth}{\c@tocdepth}}
-	
-	\let\ncsu@appendix\appendix
-	\renewcommand{\appendix}{
-		\ifthenelse{\isundefined{\ncsu@appendixheader}}
-		% Appendix title page heading not defined, define it
-		{
-			\ifthenelse{\totvalue{chapter} = 1 }%
-			%% number of appendices = 1
-			{\newcommand{\ncsu@appendixheader}{APPENDIX}}
-			%% number of appendices > 1
-			{\newcommand{\ncsu@appendixheader}{APPENDICES}}
-		}
-		% Appendix title page heading already defined, do nothing
-		{}
-		
-		\chapter*{\ncsu@appendixheader} %% insert 'Appendix' titlepage
-		\addcontentsline{toc}{chapter}{\ncsu@appendixheader}
-		%% Adding "Appendix" before letter in TOC
-		%%  We must change the width of the box which the appendix letter is set in
-		%%  and add the "Appendix " before the letter.  See tocloft documentation.
-		\addtocontents{toc}{
-			\protect\renewcommand{\protect\cftchappresnum}{Appendix }
-			\protect\renewcommand{\protect\cftchapnumwidth}{\protect\appendixwidth}
-			\protect\renewcommand{\protect\cftchapfont}{\protect\cftsecfont}
-			\protect\setlength{\protect\cftbeforechapskip}{\protect\cftbeforesecskip}
-			\protect\setlength{\protect\cftchapindent}{\protect\cftsecindent}
-			\protect\renewcommand{\protect\cftchappagefont}{\protect\cftchapfont}
-			\protect\setlength{\protect\cftsecindent}{\protect\cftsubsecindent}
-			\protect\addtolength{\protect\cftsubsecindent}{\cftsecnumwidth}
-			\protect\setcounter{tocdepth}{\c@ncsu@appendixtocdepth}
-		}
-		\clearpage
-		\ncsu@appendix %% call internal \appendix macro
-	} % \renewcommand{appendix}
+%% Since ETD requirements are different than LaTeX's normal formatting of
+%% the Table of Content's Appendix listings,
+%% we change the indentation of chapters, sections, and subsections in
+%% the appendix part of the table of contents, but no deeper divisions,
+%% so we must cap the tocdepth at 2:
+\newcounter{ncsu@appendixtocdepth}
+\ifthenelse{\c@tocdepth > 2}
+{\setcounter{ncsu@appendixtocdepth}{2}}
+{\setcounter{ncsu@appendixtocdepth}{\c@tocdepth}}
+
+\let\ncsu@appendix\appendix
+\renewcommand{\appendix}{
+    \ifthenelse{\isundefined{\ncsu@appendixheader}}
+    % Appendix title page heading not defined, define it
+    {
+        \ifthenelse{\totvalue{chapter} = 1 }%
+        %% number of appendices = 1
+        {\newcommand{\ncsu@appendixheader}{APPENDIX}}
+        %% number of appendices > 1
+        {\newcommand{\ncsu@appendixheader}{APPENDICES}}
+    }
+    % Appendix title page heading already defined, do nothing
+    {}
+
+    \chapter*{\ncsu@appendixheader} %% insert 'Appendix' titlepage
+    \addcontentsline{toc}{chapter}{\ncsu@appendixheader}
+    %% Adding "Appendix" before letter in TOC
+    %%  We must change the width of the box which the appendix letter is set in
+    %%  and add the "Appendix " before the letter.  See tocloft documentation.
+    \addtocontents{toc}{
+        \protect\renewcommand{\protect\cftchappresnum}{Appendix }
+        \protect\renewcommand{\protect\cftchapnumwidth}{\protect\appendixwidth}
+        \protect\renewcommand{\protect\cftchapfont}{\protect\cftsecfont}
+        \protect\setlength{\protect\cftbeforechapskip}{\protect\cftbeforesecskip}
+        \protect\setlength{\protect\cftchapindent}{\protect\cftsecindent}
+        \protect\renewcommand{\protect\cftchappagefont}{\protect\cftchapfont}
+        \protect\setlength{\protect\cftsecindent}{\protect\cftsubsecindent}
+        \protect\addtolength{\protect\cftsubsecindent}{\cftsecnumwidth}
+        \protect\setcounter{tocdepth}{\c@ncsu@appendixtocdepth}
+    }
+    \clearpage
+    \ncsu@appendix %% call internal \appendix macro
+} % \renewcommand{appendix}
 } % \AtBeginDocument
 
 \ncsu@defaultspacing

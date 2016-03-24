@@ -1,97 +1,38 @@
 \chapter{INTRODUCTION}
-\label{chap-one}
-Let's start with a few paragraph basics, here is how to make \textbf{bold}, 
-and \textit{italics}, and \emph{emphasized}.  Let's say you need to cite 
-something in your references, simply type \verb^\cite{key}^, which produces
-\cite{einstein1935particle}.  
-Some other references are \cite{golub1996matrix} and 
-\cite{larsen1974asymptotic}.
-Some \LaTeX{} compilers 
-require a second compilation for citations and references 
-to be sorted and matched properly in the resulting document.  
+\label{chap:intro}
+In Requirement Engineering, goal models are used to widely to perform business analytics. Stakeholders' requirements, tasks and resources are generally represented via graphs in such models. The requirements in the model are supported via various decisions in the model generally represented using tasks and resources. decisions are components of a model usually arrived upon by a consensus between stakeholders and engineers. For example in a reporting tool, \textit{alerts}, \textit{trends}, \textit{benchmarking} etc. are few common decisions. Most of the stakeholders' requirements are conflicting and thus there does not exist a single best solution. Due to the complexity of these models and critical nature of the requirements, business analysts generally spend weeks pondering over them and are still unable to find the set of decisions to be satisfied to attain all the optimum solutions \cite{korson92}.
 
-Here is a quotation:
-\begin{quotation}
-Alice, Bob and Carol are boring.  Who would even want to know their secret?
-\end{quotation}
+\section{Motivation}
+\label{sec:intro:motivation}
+The quality of a software is greatly controlled by the quality of the development process used to create it \cite{aurum05}. For the success of a software product, effective management of the Requirement Engineering Process needs to be mandated using procedures and tools. Andriole Et. al\cite{andriole98} conducted a study and emphasizes that most of the software projects come from preferences of managers, either from an intuition about a value, or from other related projects they have previously worked on. This conclusion is further strengthened by Strigini Et. al \cite{strigini96}, that in numerous cases, important decisions are subjective in nature. To highlight the consequence of this process, consider a project pre-planning meeting with 20 people in a room trying to reason out the key components of the project at hand. Assuming that each person suggests one module of the project that can(not) be implemented, we could easily end up with having a million combinations of choice of modules to(or not to) be implemented. Most modules have a cost associated with it, if it is chosen to be implemented and a benefit it could potentially yield towards. So ideally, an analyst would be required to identify which modules need to be implemented and selecting from a million possible combinations would not be an easy task. Moreover, each combination would yield different benefits at different costs; thus a analyst might also need to highlight different choice of modules to present to a stakeholder.
 
-Let's say we need to make a list, try this on for size
-\begin{enumerate}
-  \item NCSU is great
-  \item I like NCSU
-  \item I really hope I can find a job when I graduate!
-\end{enumerate} 
+Failure to identify multiple solutions is primarily due to the complexity of the model and competing stakeholders' requirements. For example, consider the ambulance dispatching system for the London Ambulance Service (LAS) \cite{finkelstein96}. This system must ensure that ambulances respond to reported incidents across the city as swiftly as possible. Alternative options for improving the system include improving some of the call-taking features of the software so that details about reported incidents can be encoded faster and more accurately; replacing ambulance radios with mobile data terminals so that more information can be communicated directly to the ambulance crews; and improving the speed and accuracy of ambulance-allocation decisions by automating all or part of the allocation process. These alternatives have different costs and different impacts on the system requirements.
 
-\section{Math enviroments}
-\subsection{Equations}
-
-There are many different ways to write equations, for example we could put 
-$a^2 + b^2 = c^2$ directly into a sentence.  Or we could use the equation 
-enviroment and do 
-%
-\begin{equation}
-  a^2+b^2=c^2.
-  \label{eq:one}
-\end{equation} 
-And from here we can later reference it by simply doing typing 
-\verb^\ref{label}^, which gives \ref{eq:one}.  However, defining and using
-equation and figure reference macros will ensure that the equation
-references are consistent, instead of having Eq.~(1), Equation 3, Eqn 4
-scattered through the thesis.  This template file defines \verb^\eref^
-and \verb^\fref^ for this purpose. You can modify the macros to your liking
-in the \texttt{YourName-thesis.tex} file.
-For example, the command \verb^\eref{label}^ gives \eref{eq:one}.
+Thus, prominent decisions in a RE goal model needs to be identified such that we can satisfy stakeholders' requirements or their optimal choices in case the requirements are conflicting in nature\footnote{A Conflict refers to satisfiability of one requirement leads to unsatisfiability of another requirement}.
 
 
-If you don't need to reference an equation you may simply do this 
-\[
-  a^2 + b^2 = c^2.
-\]
+\section{Research Questions}
+\label{sec:intro:rq}
+In order to understand the significance of decisions in goal models, we augment this thesis with a set of initial research guidelines for building a novel framework.
 
-For Greek letters you must go to the math enviroments, for example 
-$\alpha$, $\beta$, and $\gamma$.  Let's look at equations that cover 
-multiple lines, none of these equations may be true or mean anything, but so 
-that the reader can get some ideas.  In addition I will use some other useful 
-notations like subscripts, superscripts, fractions, etc.  One important item 
-of note is that one uses the ``ampersand" symbol to line up equations 
-(also look at how I used quotations).
-%
-\begin{eqnarray}
-\gamma_1 & = & \alpha^{\beta} + \psi_0 \frac{\psi_1}{\psi_2+\psi_3} \label{eq.two} \\
-& = & \beta_1 + \beta_2 + \ldots + \beta_k \nonumber\\
-& \rightarrow & E(\gamma_2) 
-\end{eqnarray}
+\begin{itemize}
+    \item \textbf{RQ1: Does there exist a pareto set of stakeholders' goals?}. Can we identify different sets of decisions which result in satisfying multiple stakeholders' goals with some optimal trade-offs between possibly conflicting ones?
+\end{itemize}
 
-Alternatively, one can specify a slightly different enviroment if none of 
-the equations need to be numbered.  Remember that if you are planning on 
-referring to them later on, you must use a ``label" statement.
-%
-\begin{eqnarray*}
-\gamma_1 & = & n^{-1/2} \displaystyle \sum_{i=1}^n \left[h(X_i,\beta_0)-E\{h(X_i,\beta_0)\}\right]\\
-& \rightarrow & \hat q \pm \frac{\partial \gamma_2}{\partial \beta}. 
-\end{eqnarray*}  
-Lastly there may be times in which you want to use a non-italicized word 
-your formula, such as an indicator function that may look like this 
-$\mbox{I}\{\mu_i(1,\beta)>\mu_i(0,\beta)\}$ , if so just use the 
-``mbox" statement.
+\begin{itemize}
+    \item \textbf{RQ2: Are there decisions that influence goal models more than other decisions?}. Menzies et. al \cite{menzies07} says that there exists significant local tunings in software engineering prediction models. We extend the analogy and check if there exists significant decisions in requirement engineering goal models to satisfy stakeholders' goals such that, when set to the appropriate value, it yields close to the expected result at significantly reduced cost estimates.
+\end{itemize}
 
+\section{Thesis Statement}
+\label{sec:intro:thesisStat}
 
-You could use a multiline equation for long equations.  The environment
-is \texttt{multline}.  Insert \verb^\\^ for line breaks.
+In this thesis, the focus is on analyzing the requirements engineering goal models and identifying the set of decisions that lead to all possible sets of objectives with conflicting goals at an acceptable trade-off between them. To facilitate this study, we developed a python based encoding for i* and AHP modelling languages, called py*(Appendix \ref{appendix:1}). Since most of the stakeholders' requirements are conflicting, a multi-objective optimization algorithm would be required to obtain all possible choice of decisions. Our study was performed using Differential Evolution\cite{storn97}. Identifying the all the set of decisions might not suffice as many a times satisfying all the operators might be cost inefficient and there could be operators that do not contribute significantly towards the stakeholders' requirements. Hence,  once the solutions are identified, a further analysis is conducted using a probabilistic approach to rank the decisions on their significance towards the stakeholders' requirements. Our study finally concludes that in most models using a small top ranked decisions would suffice and yields similar result to the expected stakeholders' requirements at a much lower cost.
 
-\begin{multline*}
-\bo \cdot \vec{\nabla} \psi(\vec{r},\bo ,E) + \Sigma_t(\vec{r},E)\psi(\vec{r},\bo ,E) = \\
-  \int_{4\pi} d\bo' \int_0^{\infty} dE' \, \Sigma_s(\vec{r},\bo'\to\bo,E'\to E)\psi(\vec{r},\bo',E') + Q(\vec{r},\bo ,E),
-\end{multline*}
+\medskip
+The thesis thus makes the following contributions,
 
-
-we operate with $\displaystyle\int_{0}^{\infty}\left(\,\cdot\,\right) dE$
-to obtain
-\begin{multline*}
-  \bo \cdot \vec{\nabla} \tilde{\psi}(\vec{r},\bo)
-  + \Sigma_t(\vec{r})\tilde{\psi}(\vec{r},\bo) = \\
-  \int_{4\pi} d\bo' \int_0^{\infty} dE' \, \psi(\vec{r},\bo',E')
-  \left [ \int_{0}^{\infty} dE \, \Sigma_s(\vec{r},\bo'\to\bo,E'\to E)
-  \right ] + \tilde{Q}(\vec{r},\bo),
-\end{multline*}
-
+\begin{itemize}
+    \item In requirements engineering goal models, when the stakeholders' requirements are conflicting, we can obtain a Pareto Front \cite{miettinen99} of these requirements using a multi-objective optimization algorithm.
+    
+    \item Requirements engineering goal models contains significant decisions such that when set to their appropriate values, it yields close to the expected result at significantly reduced cost estimates.
+\end{itemize}

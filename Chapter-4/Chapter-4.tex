@@ -1,0 +1,229 @@
+\chapter{Search Algorithm}
+\label{chap:sa}
+
+In chapter \ref{chap:model} we defined the internal space of our models. We now look to optimize it. Differential Evolution, a multi-objective optimization algorithm is used to optimize the decision space as per the stakeholders requirements(objectives) and post which a bayesian selection algorithm is used to rank the design decisions of the model according to how well they satisfy the objectives.
+
+\section{Differential Evolution}
+\label{sec:sa:de}
+\textit{Meta-heuristics} are higher-level procedures or heuristics designed to find, generate, or select a heuristic that may provide a sufficiently good solution to an optimization problem, especially with incomplete or imperfect information or limited computation capacity. Meta-heuristics sample a set of solutions which is too large to be completely sampled. Meta-heuristics may make few assumptions about the optimization problem being solved, and so they may be usable for a variety of problems. Meta-heuristics are also based of Monte Carlo algorithms. A \textit{Monte Carlo} algorithm randomly samples the space of possible controllable model states. A \textit{Metropolis} Monte Carlo algorithm \cite{metropolis53} creates new states by small mutations to the current state. If a new state is ``better" (as assessed through the domination of the decisions with respect to the objectives of the model), it replaces the current state and us used for future mutations.
+
+\textbf{D}ifferential \textbf{E}volution(DE) is a meta-heuristic evolutionary computation method that can find the Pareto Front of the multi-objective optimization problem without converting it into a single-objective optimization one. DE optimizes a problem by iteratively trying to improve a candidate solution with regard to a specific measure(s) of quality. DE does not make any assumptions on the nature of the optimization problem and does not require the problem to be continuous or differentiable.
+
+
+\begin{algorithm}[!hbtp]
+\caption{Differential Evolution}
+\label{algo:DE}
+\begin{algorithmic}[1]
+\State Generate randomly an initial population($P$) of solutions where each solution $x \in R^n$.
+\State Calculate the fitness of the initial population.
+\Repeat
+    \For{each point $p \in P$}
+        \State Pick 3 other points $a$, $b$ \& $c$ from $P$ where $a,b,c \neq p$
+        \State Pick a random index $R \in {1, \ldots, n}$
+        \For{$i \in n$}
+            \State $r_i \in U(0,1)$
+            \If{$r_i \le CR$ or $i = R$} 
+                \State $y_i = a_i + F * x_i *  (b_i - c_i)$
+            \Else
+                \State $y_i = x_i$
+            \EndIf
+        \EndFor
+        \If{$f(y) < f(x)$}
+            \State replace $x$ with $y$ in $P$
+        \EndIf
+    \EndFor
+\Until {Stop condition is satisfied}
+\State $P$ now represents the Pareto Front
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm \ref{algo:DE} describes the generic approach for the Differential Evolution algorithm. The parameter $F \in [0,2]$ on line 10 represents \textit{differential weight} and $CR \in [0,1]$ on line 9 represents the crossover rate. Both these parameters are chosen based on the problem and requires engineering judgement or tuning to be correctly chosen.
+
+For our models there are a few changes we incorporate that is different to the classical differential evolution method. We change the random generation by introducing the structure of the model while generation and we augment the mutation operation in line 10 to support binary variables.
+
+\subsection{Generation}
+\label{subsec:sa:de:gen}
+
+The classical Differential Evolution algorithm uses random generation for the initial population i.e the decisions are randomly sampled across the entire model decision space. We propose a modified method that utilizes the structure of the model for sampling the initial population.
+
+\begin{algorithm}[!hbtp]
+\caption{Generation}
+\label{algo:DE:gen}
+\begin{algorithmic}[1]
+    \Procedure{generate}{$tree$, $node$, $value$}
+        \State $kids = \bm{GET\_KIDS}(tree, node)$
+        \If{$kids == null$}
+            \State \Return $\{\bm{ID}(node)\ :\ value\}$
+        \EndIf
+        \State $decisions = \{ \ \}$
+        \State $e\_type = kids[0].edge$
+        \State $kids = \bm{SHUFFLE}(kids)$
+        \If {($e\_type == ``and" \ \&\&\ value==t) \quad||\quad (e\_type == ``or" \ \&\&\  value==f$)}
+            \For{each $kid$ in $kids$}
+                \State $\bm{UPDATE}(decisions,\ \bm{GENERATE}(tree,\ kid,\ value))$
+            \EndFor
+        \Else
+            \State $first, rest$ = $\bm{LOO}(kids)$
+            \State $\bm{UPDATE}(decisions,\ \bm{GENERATE}(tree,\ kid,\ value))$
+            \For{each $kid$ in $rest$}
+                \State $\bm{UPDATE}(decisions,\ \bm{GENERATE}(tree,\ kid,\ \bm{choice}(t, f)))$
+            \EndFor
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The modified \textbf{generation} algorithm is defined in Algorithm \ref{algo:DE:gen}. The function is called by passing the model(represented as tree), the root node(represented as node) and the expected value($t$ represents satisfied and $f$ represents unsatisfied). On line 2 the incoming nodes(kids) of the node is retrieved and if there are no incoming nodes a map containing with the node id as the key and the expected value is returned. On lines 6 an empty dictionary is declared and on line 7 edge type of the incoming children are retrieved. The children are randomly shuffled in line 8. On lines 9-13, if the incoming edge is of type AND and the expected value is satisfied or if the incoming edge is of type OR and the expected values is unsatisfied, each incoming node is recursively called with the expected value. This is because for a node with AND edge to be satisfied, all the incoming nodes needs to be satisfied and similarly for a node with an OR edge to be unsatisfied all the incoming nodes needs to be unsatisfied. In the alternate case on lines 13 to 19 one of the incoming nodes($first$) is satisfied for an OR edge and one the incoming nodes is unsatisfied for an AND edge. For all the remaining nodes($rest$), each node is recursively called with a random expected value.
+
+\subsection{Mutation \& Crossover}
+\label{subsec:sa:de:mut}
+
+Storn classically proposed using differential mutation and crossover strategy \cite{storn96} but this can only be applied only to continuous decision spaces(As shown on line 10 of Algorithm \ref{algo:DE}). Since the goal models we deal with are binary in nature, we take an alternate method of mutation as shown in \cite{falco07}. The method is defined in \eref{eq:DE:binary}.
+
+\begin{equation}
+    \begin{aligned}
+        & X_{new} = X_1 \lor (FV \land (X_2 \oplus X_3))\\
+        & FV = \{0, 1\}^n \quad where\ n = length(X_{1}) \\
+        & FV_i = 1,\quad if\ Random() < F \\
+        & \quad \ \ \ \, = 0,\quad otherwise 
+    \end{aligned}
+    \label{eq:DE:binary}
+\end{equation}
+
+Three decision vectors are selected at random. In the vector 1 represents a satisfied and 0 represents an unsatisfied decision. FV is a random vector whose length is equal to the number of decisions. $\lor$ represents a logical OR operator, $\land$ represents a logical AND operator and $\oplus$ represents a logical XOR operator.
+
+\bigskip
+
+\noindent
+In terms of the goal of this thesis, exploring the decision subset selection is an essential feature.
+
+\begin{itemize}
+    \item Prior to removing unimportant decisions, we rank them with respect to their effectiveness in contribution towards the objectives.
+    \item After removal of the non-essential decisions we see the contribution of the reduced model towards the objectives and the savings in the cost. 
+\end{itemize}
+
+\section{Support Based Bayesian Ranking}
+\label{sec:sa:bayes}
+
+Each decision in the model contributes towards the objectives. Some decisions contribute more than others and if such decisions are identified, the complexity of the model can be reduced. Menzies Et. Al. proposed a support based bayesian ranking algorithm \cite{menzies07} that ranks the decisions using a Simulated Annealer \cite{kirkpatrick83}. We adapt this approach but replace the simulated annealer with differential evolution and also introduce non-dominated sorting.
+
+\begin{figure}
+    \begin{mdframed}[backgroundcolor=white]
+        \begin{center}
+            {\bf Non Dominated Sorting}\\
+        \end{center}
+        Non Dominated Sorting was a fast objective sorting approach was developed by Srinivas and Deb \cite{srinivas94}. The algorithm is described as follows.
+        \bigskip
+        \begin{compactitem}
+            \item \boldm{P} is a set of points to be sorted and \boldm{k} top points have to be retrieved.
+            \item For each individual \boldm{p} in the set \boldm{P}.
+            \begin{compactitem}
+                \item Initialize \boldm{S_p} = []. This set would contain all the points dominated by p.
+                \item Initialize \boldm{n_p} = 0. This would be the number of points that dominate p.
+                \item For each point \boldm{q} in \boldm{P}
+                \begin{compactitem}
+                    \item If \boldm{p} dominates \boldm{q} then
+                        \begin{compactitem}
+                            \item Add q to set 
+                        \end{compactitem}
+                    \item Else If \boldm{q} dominates \boldm{p} then
+                        \begin{compactitem}
+                            \item Increment \boldm{n_p} by 1.
+                        \end{compactitem}
+                \end{compactitem}
+            \end{compactitem}
+            \item If \boldm{n_p} = 0 then
+                \begin{compactitem}
+                    \item Set rank of \boldm{p} to 1.
+                    \item Update the first front set by adding \boldm{p} to first front(\boldm{F_1}).
+                \end{compactitem}
+            \item Initialize front counter to 1; i.e \boldm{i} = 1.
+            \item While \boldm{F_i} is not empty
+                \begin{compactitem}
+                    \item Initialize \boldm{Q} = []; i.e Set of all points in $(\bm{i} + 1)^{th}$ front.
+                    \item For each individual \boldm{p} in \boldm{F_i}.
+                    \begin{compactitem}
+                        \item For each individual \boldm{q} in \boldm{S_p}
+                        \begin{compactitem}
+                            \item Decrement \boldm{n_q} by 1.
+                            \item If \boldm{n_q} = 0 then
+                            \begin{compactitem}
+                                \item Set rank of \boldm{q} to (\boldm{i} + 1).
+                                \item Update Q with \boldm{q}.
+                            \end{compactitem}
+                        \end{compactitem}
+                    \end{compactitem}
+                    \item Increment the front counter \boldm{i} by 1.
+                    \item Set \boldm{Q} as the next front; i.e \boldm{F_i} = \boldm{Q}.
+                \end{compactitem}
+            \item Return the top \boldm{k} points from the top fronts.
+        \end{compactitem}
+        \bigskip
+        In the algorithm the term \bit{dominate} refers to Pareto Dominance \cite{deb01} and is mathematically defined in section \ref{sec:bg:moo}.
+    \end{mdframed}
+    \caption{Non Dominated Sorting}
+    \label{fig:non_dom}
+\end{figure}
+
+We first rank the decisions using \boldm{K} runs of the differential evolution algorithm. The \boldm{K} runs are divided based on Non Dominated Sorting as described in \fref{fig:non_dom} into:
+
+\begin{itemize}
+    \item \textit{Best} : Points associated with the top \boldm{BEST}\% points.
+    \item \textit{Rest} : Points that are not included in best.
+\end{itemize}
+
+The algorithm then computes the probability that a decision is found in \textit{best} using Bayes' Theorem. Informally, the theorem says that $posterior = prior * likelihood$ ;i.e. what we'll believe next($posterior$) comes from how the $likelihood$ effects with our $prior$ beliefs. More formally:
+
+\begin{equation}
+    P(H|E) = P(E|H) * \dfrac{P(H)}{P(E)}
+    \label{eq:bayes}
+\end{equation}
+
+i.e using evidence $E$ and a prior probability $P(H)$ for hypothesis $H \in \{best, rest\}$. The theorem calculates the posterior probability $P(H|E)$. Simple Bayes classifiers are often called ``naive" since they assume independence of each feature. While this assumption simplifies the implementation(frequency counts are required only for each decision), it is possible that correlated events are missed by this naive approach. Domingos and Pazzani show theoretically that the independence assumption is a problem in a vanishingly small percent of cases \cite{domingos97}. This explains the repeated empirical result that, on average, seemingly naive Bayes classifiers perform as well as other seemingly more sophisticated schemes.
+
+When applying the theorem, \textit{likelihoods} are computed from observed frequencies, then normalized to create probabilities (this normalization cancels out $P(E)$ in \eref{eq:bayes}, so it need not be computed). For example after K = 10,000 runs divide into 1,000 lowest 10\% \textit{best} solutions and 9,000 \textit{rest}, the decision $2Tier = satisfied$ from \fref{fig:ahp} might appear 10 times in the \textit{best} solutions, but only 5 times in the rest. This can be formulated as follows:
+
+\begin{equation}
+    \begin{aligned}
+        E &\quad =\quad (2Tier == satisfied) \\
+        P(best) &\quad =\quad 1000 / 10000 = 0.1 \\
+        P(rest) &\quad =\quad 1000 / 10000 = 0.1 \\
+        freq(E|best) &\quad =\quad 10/1000 = 0.01 \\
+        freq(E|rest) &\quad =\quad 5/9000 = 0.00056 \\
+        like(best|E) &\quad =\quad freq(E|best) * P(best) = 0.001\\
+        like(rest|E) &\quad =\quad freq(E|rest) * P(rest) = 0.000504\\
+        P(best|E) &\quad =\quad \dfrac{like(best|E)}{like(best|E) + like(rest|E)}
+    \end{aligned}
+    \label{eq:posterior}
+\end{equation}
+
+Clark found that \eref{eq:posterior} is a poor ranking heuristic since it is distracted by low frequency evidence \cite{clark05}. For example, note how the probability of $E$ belonging to the best class is moderately high even though its support is very low; i.e $P(best|E) = 0.66$ but $freq(E|best) = 0.01$.
+
+To avoid such unreliable low frequency evidence, \eref{eq:posterior} is augmented with a support term. Support should \textit{increase} as the frequency of a range \textit{increases},i.e $like(best|x)$ is a valid support measure. STAR1 algorithm thus ranks the decisions using \eref{eq:star1}.
+
+\begin{equation}
+    \begin{aligned}
+        P(best|E) * support(best|E) &\quad = \quad \dfrac{like(best|x)^2}{like(best|x) + like(rest|x)}
+    \end{aligned}
+    \label{eq:star1}
+\end{equation}
+
+
+\section{The STAR1 Algorithm}
+\label{sec:sa:star1}
+
+STAR1 was a framework proposed by Menzies Et. Al \cite{menzies07} that utilized an optimizer and a ranker to rank the decisions. We include Differential Evolution as an optimizer and the Bayesian ranker from Section \ref{sec:sa:bayes} as the ranker for the framework. The STAR1 runs in six phases. With respect to standard machine learning theory, step 1 generates a training set; sets 2 and 3 performs some generalization; step 4 tests the learned theory on the data; and step 5 reports our learning.
+
+\begin{itemize}
+    \item \bit{SAMPLE}: To sample the decisions form the models, STAR1 runs the Differential Evolution algorithm $\bm{K_1}$ times.
+    \item \bit{CLASSIFY}: The outcomes of the runs are then ranked into those seen in $\bm{BEST}$\% as \textit{best} and the remaining into \textit{rest}.
+    \item \bit{RANK}: The decisions along with their optimal values are then ranked using Non Dominated Sorting as depicted in \fref{fig:non_dom} in the decreasing order by their $probability\ *\ support$ \eref{eq:star1} of appearing in the \textit{best} outcomes.
+    \item \bit{PRUNE}: The algorithm then runs $\bm{K_2}$ experiments with the models where the top ranked decisions 1 \ldots $\bm{X}$ are pre-set to their optimal value as computed on the previous step. The remaining decisions are randomly are assigned random values. This step is crucial as we identify the significance of each decision and its contribution towards the satisfaction of the model's objectives.
+    \item \bit{REPORT}: The algorithm finally plots the median and Inter-Quartile Range(IQR) for each of the 1 \dots $\bm{X}$ decisions which the analyst can use to identify the significance of the decisions.
+\end{itemize}
+
+To run our experiments, we applied our engineering judgement and experimental verification for setting the parameters in the algorithm:
+
+\begin{center}
+    $\bm{K_1}$ = 1,000, $\bm{K_2}$ = 1,000, $\bm{BEST}$ = 10\%
+\end{center}

@@ -1,0 +1,79 @@
+\chapter{Related Work}
+\label{chap:relwork}
+
+Similar work on the lines of exploring Requirements Engineering Goal models for satisfying stakeholders' requirements are proposed by several software engineering research groups.
+
+\section{Functional REKB}
+\label{sec:rekb}
+
+In most software engineering projects requirements are commonly elicited by reusing requirements from previous similar projects, which correlates with lower volatility in requirements \cite{ferreira11}. Thus, using an adaptive requirements framework like the one proposed by Baresi Et. al. \cite{baresi10} that makes an assumption that the complete set of requirements, stakeholders' goals, decision space and domain knowledge do not change would not be apt for such a model. To address such similar RE models, Ersnt et.al proposed an evolutionary requirements framework which they call the Functional REKB approach \cite{ernst11}.
+
+They suggest that the problem solver should be supported by a \textbf{R}equirements \textbf{E}ngineering \textbf{K}nowledge \textbf{B}ase (REKB). The purpose of the knowledge base is to
+
+\begin{enumerate}
+    \item Store the information acquired while acquiring requirements, modelling the domain and justifying the decomposition of the problem.
+    \item Ask a variety of questions which can be used to compare and compute alternative solutions for the problem.
+\end{enumerate}
+
+The advantage of this approach as highlighted by the authors is that various operators on REKB can be used to modify a solution for a known problem for a similar problem with an unknown solution. They categorize the operations on REKB into four categories defined as follows
+\begin{itemize}
+    \item \textbf{TELL}: These operations are used to introduce the atoms and formulae allowable in the problem. A \textit{symbol table} is used to store the atoms and all the formulae are stored as \textit{theory}.
+    \begin{itemize}
+        \item \bit{DECLARE\_ATOMIC}: Add an atom to the symbol table with a corresponding label for reference.
+        \item \bit{ASSERT\_FORMULA}: Add a formula to the theory with a corresponding label for reference.
+        \item \bit{ASSERT\_ATTITUDE}: Add to an indication of a formula's optative nature in the symbol table.
+    \end{itemize}
+    \item \textbf{UNTELL}: These operations perform the inverse operations for the tell operator. For the assertions, the model allows only retracting those formulae that were previously explicitly asserted.
+    \item \textbf{ASK}: These operations are used to retrieve stored information about atoms and formulae in the symbol table and theory.
+    \begin{itemize}
+        \item \bit{ARE\_GOALS\_ACHIEVED}: Checks if a goal can be satisfied using a given set of tasks with respect to the domain knowledge accumulated so far in the REKB.
+        \item \bit{MINIMAL\_GOAL\_ACHIEVEMENT}:Yields a minimal set of goals after a fine-grained exploration of the status of the goals and certain sub-goals, i.e. it returns a set of solutions such that it is consistent with the theory.
+    \end{itemize}
+    \item \textbf{ASK for Evolution}: This operation is used with the intent to help obtain solutions to a a subset of the problem in an incremental evolution framework. A distance function is used for this operation which is defined as the minimum number of increments/decrements required to change one solution to another.
+\end{itemize}
+
+This knowledge base was implemented on top of a reason maintenance system(ATMS) proposed by Kleer \cite{deKleer86} and was validated on random Requirements engineering problems(directed graphs) from 50 to 600 nodes. The results show that incremental solutions are close to two orders of magnitude faster than adaptive solutions but the absolute runtimes are not extremely expensive(seconds to milliseconds).
+
+\section{RE-KOMBINE}
+\label{sec:rekombine}
+In modern software systems such as the Agile methodology\cite{beck01}, it is increasingly uncommon to be fully specified by the stake holder before the start of its development. The requirements keep evolving and the software systems should be capable of accommodating for the changes. The functional REKB method highlighted in section \ref{sec:rekb} is suitable for this model of software engineering but requirement changes often lead to project failures \cite{mcgee11} and functional REKB method is not capable of addressing it. This is because the ATMS based implementation could lead to decision space explosion due to conflicts between theory and decisions.
+
+Thus, a paraconsistency based framework was proposed by Ernst Et. al \cite{ernst12} called \textbf{RE-KOMBINE} for managing the inconsistencies in requirements problems that typically arise due to evolution of requirements and variablity between them. In paraconsistent logic, an inconsistency is not trivialized i.e the model tolerates inconsistencies as long as there exists a subset of the problem that satisfies the goals(stakeholders' requirements). Classically, the requirements problem as the search for tasks $T$ and constraints $R$ with respect to the domain knowledge $D$ such that the goals are satisfied is represented as 
+
+\begin{equation}
+    \begin{aligned}
+        D \cup T \cup R \vdash G
+    \end{aligned}
+    \label{eq:rekombine:classic}
+\end{equation}
+
+In RE-KOMBINE drawing conclusions from a set of possibly inconsistent set of assumptions is denoted by the $\pconsistent$ symbol. The symbol is defined based on the paraconsistent reasoning as proposed by Rescher and Manor \cite{rescher70} i.e. given a theory $\Delta$, MC($\Delta$) is defined as the set of maximal consistent subsets of $\Delta$ and weak(credulous) consequences are those that follow from one element of MC($\Delta$), while inevitable(cautious, skeptical) ones are those that hold in all such maximal subsets. The authors propose the definition as follows
+
+\begin{definition}
+$\Delta \pconsistent S$ iff there exists $\Pi \subseteq \Delta$ such that
+\begin{enumerate}
+    \item $\Pi \in MC(\Delta)$,
+    \item $\Pi$ contains all implications in $\Delta$, (written Implications($\Delta$)),
+    \item $\Pi \vdash S$
+\end{enumerate}
+\end{definition}
+
+Thus based on a domain theory $D$ and a specific set of goals $G_0$, a solution to the requirements problem would consist of a set of conflicts $R_0$ and a set of tasks $T_0$ and the original equation \eref{eq:rekombine:classic} is replaced as 
+
+\begin{equation}
+    \begin{aligned}
+        D \cup T_0 \cup R_0 \pconsistent G_0
+    \end{aligned}
+    \label{eq:rekombine:para}
+\end{equation}
+
+Thus for any particular situations the model looks for a consistent set of tasks and goals that can solve the problem
+
+RE-KOMBINE is an update on REKB(Section \ref{sec:rekb}) specifying update and query operators. Two additional operations are described in RE-KOMBINE.
+
+\begin{enumerate}
+    \item \textbf{PARACONSIST\_MIN\_GOAL\_ACHIEVEMENT}: Given a set of all subsets of the goals the operation returns all the sets of set of Tasks such that each set of tasks is paraconsistent with the set of goals with respect to the REKB.
+    \item \textbf{PARACONSIST\_GET\_CANDIDATE\_SOLUTIONS}: Given a set of goals the are mandatory($M$) and a set of goals that are wished to be accomplished($W$) the operation returns a set of pairs of a set of tasks and a set of goals such that the set of tasks is paraconsistent with the set of goals and the set of goals is the union of $M$ and $W$. The set of goals is maximal with respect to these properties while the set of tasks is subset-minimal.
+\end{enumerate}
+
+The RE-KOMBINE model was evaluated with two case studies found in Data Security Standard \cite{morse08}, which is an industry standard which regulates security of credit card transactions and demonstrates the scalability of the model for industrial design problems.
